@@ -54,19 +54,19 @@ func main() {
 	}
 
 	// 4. Initialize Repositories
-	userRepo := employee.NewRepository(db)
+	employeeRepo := employee.NewRepository(db)
 	attendanceRepo := attendance.NewRepository(db)
 	overtimeRepo := overtime.NewRepository(db)
 	reimbursementRepo := reimbursement.NewRepository(db)
 	payrollRepo := payroll.NewRepository(db)
 
 	// 5. Initialize Services
-	authService := auth.NewService(userRepo, cfg.JWTSecret)
-	employeeService := employee.NewService(userRepo)
+	authService := auth.NewService(employeeRepo, cfg.JWTSecret)
+	employeeService := employee.NewService(employeeRepo)
 	attendanceService := attendance.NewService(attendanceRepo)
 	overtimeService := overtime.NewService(overtimeRepo)
 	reimbursementService := reimbursement.NewService(reimbursementRepo)
-	payrollService := payroll.NewService(payrollRepo, userRepo)
+	payrollService := payroll.NewService(payrollRepo, employeeRepo)
 
 	// 6. Initialize Router
 	router := api.NewRouter(authService,
