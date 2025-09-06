@@ -1,3 +1,4 @@
+// File: internal/domain/payroll/repository.go
 package payroll
 
 import (
@@ -10,24 +11,25 @@ import (
 	"gorm.io/gorm"
 )
 
+// Repository mendefinisikan kontrak untuk semua operasi database terkait payroll.
 type Repository interface {
 	CreatePayrollPeriod(ctx context.Context, period *PayrollPeriod) error
 	GetPayrollPeriod(ctx context.Context, id string) (*PayrollPeriod, error)
-	UpdatePayrollPeriodStatus(ctx context.Context, id, status string) error
-
+	UpdatePayrollPeriodStatus(ctx context.Context, id, status string, updatedByID string) error
 	GetAttendances(ctx context.Context, userID string, start, end time.Time) ([]attendance.Attendance, error)
 	GetOvertimes(ctx context.Context, userID string, start, end time.Time) ([]overtime.Overtime, error)
 	GetReimbursements(ctx context.Context, userID string, start, end time.Time) ([]reimbursement.Reimbursement, error)
-
 	CreatePayslip(ctx context.Context, payslip *Payslip) error
 	GetPayslip(ctx context.Context, userID, periodID string) (*Payslip, error)
 	GetPayslipsByPeriod(ctx context.Context, periodID string) ([]Payslip, error)
 }
 
+// repository adalah implementasi dari Repository interface menggunakan GORM.
 type repository struct {
 	db *gorm.DB
 }
 
+// NewRepository membuat instance baru dari repository payroll.
 func NewRepository(db *gorm.DB) Repository {
 	return &repository{db}
 }
@@ -44,8 +46,12 @@ func (r *repository) GetPayrollPeriod(ctx context.Context, id string) (*PayrollP
 	return &period, nil
 }
 
-func (r *repository) UpdatePayrollPeriodStatus(ctx context.Context, id, status string) error {
-	return r.db.WithContext(ctx).Model(&PayrollPeriod{}).Where("id = ?", id).Update("status", status).Error
+func (r *repository) UpdatePayrollPeriodStatus(ctx context.Context, id, status string, updatedByID string) error {
+	updates := map[string]interface{}{
+		"status":     status,
+		"updated_by": updatedByID,
+	}
+	return r.db.WithContext(ctx).Model(&PayrollPeriod{}).Where("id = ?", id).Updates(updates).Error
 }
 
 func (r *repository) GetAttendances(ctx context.Context, userID string, start, end time.Time) ([]attendance.Attendance, error) {

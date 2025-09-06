@@ -14,6 +14,8 @@ type PayrollPeriod struct {
 	Status    string    `json:"status" gorm:"default:'pending'"` // pending, processing, completed
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	CreatedBy string    `gorm:"size:36" json:"created_by"`
+	UpdatedBy string    `gorm:"size:36" json:"updated_by"`
 }
 
 func (p *PayrollPeriod) BeforeCreate(tx *gorm.DB) error {
@@ -39,6 +41,9 @@ type Payslip struct {
 	ReimbursementTotal float64   `json:"reimbursement_total"`
 	TotalPay           float64   `json:"total_pay"`
 	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+	CreatedBy          string    `gorm:"size:36" json:"created_by"`
+	UpdatedBy          string    `gorm:"size:36" json:"updated_by"`
 }
 
 func (p *Payslip) BeforeCreate(tx *gorm.DB) error {

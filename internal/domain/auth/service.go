@@ -6,6 +6,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/dzakaeryan20/dealls-hris/internal/domain/employee"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -15,11 +16,11 @@ type Service interface {
 }
 
 type service struct {
-	userRepo  user.Repository
+	userRepo  employee.Repository
 	jwtSecret string
 }
 
-func NewService(userRepo user.Repository, jwtSecret string) Service {
+func NewService(userRepo employee.Repository, jwtSecret string) Service {
 	return &service{userRepo, jwtSecret}
 }
 
@@ -37,7 +38,7 @@ func (s *service) Login(ctx context.Context, username, password string) (string,
 	return generateToken(u, s.jwtSecret)
 }
 
-func generateToken(u *user.User, secret string) (string, error) {
+func generateToken(u *employee.Employee, secret string) (string, error) {
 	claims := &Claims{
 		UserID: u.ID,
 		Role:   u.Role,

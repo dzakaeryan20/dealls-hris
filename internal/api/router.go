@@ -8,6 +8,9 @@ import (
 	"github.com/dzakaeryan20/dealls-hris/internal/domain/attendance"
 	"github.com/dzakaeryan20/dealls-hris/internal/domain/auth"
 	"github.com/dzakaeryan20/dealls-hris/internal/domain/employee"
+	"github.com/dzakaeryan20/dealls-hris/internal/domain/overtime"
+	"github.com/dzakaeryan20/dealls-hris/internal/domain/payroll"
+	"github.com/dzakaeryan20/dealls-hris/internal/domain/reimbursement"
 	"github.com/go-chi/chi/v5"
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 )
@@ -16,7 +19,9 @@ func NewRouter(
 	authService auth.Service,
 	employeeService employee.Service,
 	attendanceService attendance.Service,
-	// payrollService .Service,
+	overtimeService overtime.Service,
+	reimbursementService reimbursement.Service,
+	payrollService payroll.Service,
 	jwtSecret string,
 ) http.Handler {
 	r := chi.NewRouter()
@@ -24,6 +29,7 @@ func NewRouter(
 	// Middleware
 	r.Use(chimiddleware.Logger)
 	r.Use(chimiddleware.Recoverer)
+	r.Use(middleware.IPTrackerMiddleware)
 	r.Use(chimiddleware.Heartbeat("/health"))
 
 	// Handlers

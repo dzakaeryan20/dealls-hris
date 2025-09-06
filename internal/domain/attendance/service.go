@@ -37,8 +37,10 @@ func (s *service) SubmitAttendance(ctx context.Context, userID string) error {
 	}
 
 	attendance := &Attendance{
-		UserID: userID,
-		Date:   today,
+		UserID:    userID,
+		Date:      today,
+		CreatedBy: userID,
+		UpdatedBy: userID,
 	}
 
 	return s.repo.CreateAttendance(ctx, attendance)

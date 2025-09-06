@@ -30,9 +30,11 @@ func (s *service) SubmitOvertime(ctx context.Context, userID string, date time.T
 	}
 
 	overtime := &Overtime{
-		UserID: userID,
-		Date:   date,
-		Hours:  hours,
+		UserID:    userID,
+		Date:      date,
+		Hours:     hours,
+		CreatedBy: userID,
+		UpdatedBy: userID,
 	}
 
 	return s.repo.CreateOvertime(ctx, overtime)

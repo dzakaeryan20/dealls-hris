@@ -31,6 +31,8 @@ func (s *service) SubmitReimbursement(ctx context.Context, userID string, date t
 		Date:        date,
 		Description: description,
 		Amount:      amount,
+		CreatedBy:   userID,
+		UpdatedBy:   userID,
 	}
 
 	return s.repo.CreateReimbursement(ctx, reimbursement)

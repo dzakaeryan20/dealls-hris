@@ -16,6 +16,8 @@ type Employee struct {
 	BaseSalary   float64 // Only for employees
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+	CreatedBy    string `gorm:"size:36" json:"created_by"`
+	UpdatedBy    string `gorm:"size:36" json:"updated_by"`
 }
 
 func (u *Employee) BeforeCreate(tx *gorm.DB) (err error) {
