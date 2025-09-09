@@ -35,7 +35,9 @@ func NewRouter(
 	// Handlers
 	authHandler := handler.NewAuthHandler(authService)
 	attendanceHandler := handler.NewAttendanceHandler(attendanceService)
-	// payrollHandler := handler.NewPayrollHandler(payrollService)
+	overtimeHandler := handler.NewOvertimeHandler(overtimeService)
+	reimbursementHandler := handler.NewReimbursementHandler(reimbursementService)
+	payrollHandler := handler.NewPayrollHandler(payrollService)
 
 	// Public routes
 	r.Post("/api/v1/auth/login", authHandler.Login)
@@ -50,11 +52,11 @@ func NewRouter(
 
 			// Submissions
 			r.Post("/api/v1/attendance", attendanceHandler.SubmitAttendance)
-			// r.Post("/api/v1/overtime", submissionHandler.SubmitOvertime)
-			// r.Post("/api/v1/reimbursement", submissionHandler.SubmitReimbursement)
+			r.Post("/api/v1/overtime", overtimeHandler.SubmitOvertime)
+			r.Post("/api/v1/reimbursement", reimbursementHandler.SubmitReimbursement)
 
 			// Payslip
-			// r.Get("/api/v1/payslip/{period_id}", payrollHandler.GetMyPayslip)
+			r.Get("/api/v1/payslip/{period_id}", payrollHandler.GetMyPayslip)
 		})
 
 		// --- Admin Routes ---
@@ -62,9 +64,9 @@ func NewRouter(
 			r.Use(middleware.RoleMiddleware("admin"))
 
 			// Payroll Management
-			// r.Post("/api/v1/admin/payroll-period", payrollHandler.CreatePayrollPeriod)
-			// r.Post("/api/v1/admin/payroll/{period_id}/run", payrollHandler.RunPayroll)
-			// r.Get("/api/v1/admin/payroll/{period_id}/summary", payrollHandler.GetPayrollSummary)
+			r.Post("/api/v1/admin/payroll-period", payrollHandler.CreatePayrollPeriod)
+			r.Post("/api/v1/admin/payroll/{period_id}/run", payrollHandler.RunPayroll)
+			r.Get("/api/v1/admin/payroll/{period_id}/summary", payrollHandler.GetPayrollSummary)
 		})
 	})
 

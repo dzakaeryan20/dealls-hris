@@ -9,12 +9,12 @@ import (
 	"github.com/dzakaeryan20/dealls-hris/internal/domain/reimbursement"
 )
 
-type SubmissionHandler struct {
+type ReimbursementHandler struct {
 	service reimbursement.Service
 }
 
-func NewSubmissionHandler(s reimbursement.Service) *SubmissionHandler {
-	return &SubmissionHandler{service: s}
+func NewReimbursementHandler(s reimbursement.Service) *ReimbursementHandler {
+	return &ReimbursementHandler{service: s}
 }
 
 type reimbursementRequest struct {
@@ -23,7 +23,7 @@ type reimbursementRequest struct {
 	Amount      float64 `json:"amount"`
 }
 
-func (h *SubmissionHandler) SubmitReimbursement(w http.ResponseWriter, r *http.Request) {
+func (h *ReimbursementHandler) SubmitReimbursement(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	var req reimbursementRequest
